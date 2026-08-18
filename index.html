@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#a73a2a">
+  <title>咱家菜单 · 离线版</title>
+  <style>
+    :root{--red:#a73a2a;--red2:#7d261d;--paper:#fbf4e8;--ink:#2d251f;--muted:#806f61;--line:#e5d5c1;--gold:#d69442;--white:#fffdfa;--shadow:0 14px 40px rgba(75,42,25,.12)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:radial-gradient(circle at 10% 0,#fff9ee 0,transparent 30%),linear-gradient(135deg,#f6ead9,#fffaf1);min-height:100vh}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1180px;margin:auto;padding:20px 20px 110px}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;border-radius:28px;padding:28px 30px;box-shadow:var(--shadow)}
+    .hero:after{content:"菜单";position:absolute;right:-8px;bottom:-42px;font:900 150px/1 serif;color:rgba(255,255,255,.07);pointer-events:none}.eyebrow{font-size:13px;letter-spacing:.2em;opacity:.76}.hero h1{font:800 clamp(30px,5vw,54px)/1.1 Georgia,"STSong",serif;margin:8px 0}.hero p{margin:0;opacity:.82}.top-actions{position:absolute;z-index:2;right:22px;top:24px;display:flex;gap:8px}.btn{border:1px solid transparent;border-radius:999px;padding:10px 16px;background:var(--red);color:white;font-weight:700;box-shadow:0 6px 18px rgba(167,58,42,.18);touch-action:manipulation}.btn:hover{filter:brightness(.97)}.btn.light{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);backdrop-filter:blur(8px)}.btn.ghost{background:var(--white);color:var(--red);border-color:var(--line);box-shadow:none}.btn.danger{background:#fff0ed;color:#9e2c20;border-color:#efc8c0;box-shadow:none}.btn.small{padding:7px 11px;font-size:13px}.btn.icon{width:42px;height:42px;padding:0;display:grid;place-items:center;font-size:22px}
+    .tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;margin:20px 0}.search{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);border-radius:18px;padding:0 16px}.search input{width:100%;border:0;outline:0;background:transparent;padding:14px 0;color:var(--ink)}.cats{display:flex;gap:9px;overflow:auto;padding:4px 0 12px;scrollbar-width:none}.cat{white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:rgba(255,253,250,.82);padding:9px 14px;color:var(--muted)}.cat.active{background:var(--red);color:#fff;border-color:var(--red)}
+    .summary{display:flex;justify-content:space-between;align-items:end;margin:5px 2px 14px}.summary h2{font:800 25px/1.2 Georgia,"STSong",serif;margin:0}.summary span{font-size:13px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{position:relative;background:rgba(255,253,250,.92);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 8px 24px rgba(90,57,33,.07);transition:.2s}.card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.photo{height:170px;background:linear-gradient(135deg,#eadac6,#f8ecdc);display:grid;place-items:center;overflow:hidden;position:relative}.photo img{width:100%;height:100%;object-fit:cover}.placeholder{text-align:center;color:#a48b76}.placeholder b{display:block;font:700 46px/1 serif;color:#c7ad92;margin-bottom:5px}.photo-pick{position:absolute;inset:0;opacity:0;cursor:pointer}.card-body{padding:16px}.card-row{display:flex;gap:10px;align-items:start;justify-content:space-between}.card h3{font-size:19px;margin:0 0 7px}.tag{font-size:12px;background:#f3e5d3;color:#875c36;border-radius:999px;padding:5px 8px;white-space:nowrap}.note{min-height:22px;margin:0;color:var(--muted);font-size:14px}.card-actions{display:flex;gap:7px;margin-top:14px;align-items:center}.pick{margin-left:auto;border:1px solid var(--line);background:white;color:var(--red);border-radius:999px;padding:7px 11px;font-weight:700}.pick.on{background:var(--red);color:white;border-color:var(--red)}.manage-only{display:none}.managing .manage-only{display:inline-flex}.managing .photo{outline:3px dashed rgba(167,58,42,.34);outline-offset:-8px}.empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);background:rgba(255,255,255,.55);border:1px dashed var(--line);border-radius:22px}
+    .basket{position:fixed;z-index:12;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(660px,calc(100% - 28px));background:#30251e;color:white;border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 16px 45px rgba(35,20,13,.28)}.basket strong{white-space:nowrap}.basket-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#eaded3;font-size:14px}.basket .btn{padding:8px 12px}.modal{position:fixed;z-index:30;inset:0;background:rgba(34,24,18,.52);display:none;place-items:center;padding:18px}.modal.open{display:grid}.dialog{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--paper);border-radius:24px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.28)}.dialog h2{margin:0 0 18px}.field{display:grid;gap:6px;margin:13px 0}.field label{font-size:13px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:white;border-radius:12px;padding:11px 12px;outline:0}.field textarea{resize:vertical;min-height:72px}.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.preview{height:160px;border:1px dashed #cbb39a;background:#fffaf3;border-radius:15px;display:grid;place-items:center;overflow:hidden;color:var(--muted)}.preview img{width:100%;height:100%;object-fit:cover}.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sheet-actions .btn{border-radius:14px}.hint{font-size:13px;line-height:1.7;color:var(--muted);background:#fff8ed;border:1px solid var(--line);padding:12px;border-radius:13px}.toast{position:fixed;z-index:60;top:20px;left:50%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;background:#2d251f;color:#fff;padding:11px 17px;border-radius:999px;transition:.25s;box-shadow:var(--shadow)}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:820px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top-actions{position:relative;right:auto;top:auto;margin-top:20px}.hero{padding:24px}.tools{grid-template-columns:1fr}.tools>.btn{display:block;width:100%;padding:13px 18px}}
+    @media(max-width:520px){.app{padding:12px 12px 104px}.hero{border-radius:22px;padding:22px 19px}.hero p{font-size:13px}.top-actions{gap:7px}.top-actions .btn{font-size:13px;padding:8px 11px}.grid{grid-template-columns:1fr}.photo{height:190px}.summary h2{font-size:22px}.basket{bottom:max(10px,env(safe-area-inset-bottom));border-radius:17px}.basket-text{display:none}.sheet-actions{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <section class="hero">
+      <div class="eyebrow">OUR FAMILY MENU · OFFLINE</div>
+      <h1>咱家菜单</h1>
+      <p>不用网络，也不用登录。今天想吃什么，慢慢挑。</p>
+      <div class="top-actions">
+        <button class="btn light" id="manageBtn">管理菜品</button>
+        <button class="btn light" id="backupBtn">备份与恢复</button>
+      </div>
+    </section>
+    <section class="tools">
+      <label class="search"><span>⌕</span><input id="searchInput" placeholder="搜索菜名、分类或备注…" autocomplete="off"></label>
+      <button class="btn" id="addBtn">＋ 添加新菜</button>
+    </section>
+    <nav class="cats" id="cats" aria-label="菜品分类"></nav>
+    <div class="summary"><h2 id="sectionTitle">全部菜品</h2><span id="countText"></span></div>
+    <section class="grid" id="grid"></section>
+  </main>
+
+  <aside class="basket" id="basket">
+    <strong>今晚想吃 <span id="pickedCount">0</span> 道</strong>
+    <span class="basket-text" id="pickedText">还没有选择菜品</span>
+    <button class="btn ghost small" id="copyBtn">复制清单</button>
+    <button class="btn danger small" id="clearBtn">清空</button>
+  </aside>
+
+  <div class="modal" id="editModal" role="dialog" aria-modal="true">
+    <form class="dialog" id="dishForm">
+      <h2 id="formTitle">添加菜品</h2>
+      <input type="hidden" id="dishId">
+      <div class="field"><label for="dishName">菜名 *</label><input id="dishName" maxlength="30" required></div>
+      <div class="field"><label for="dishCategory">分类 *</label><input id="dishCategory" list="categoryList" maxlength="20" required><datalist id="categoryList"></datalist></div>
+      <div class="field"><label for="dishNote">备注</label><textarea id="dishNote" maxlength="80" placeholder="比如：微辣、家常下饭"></textarea></div>
+      <div class="field"><label for="dishImage">菜品照片（可稍后再加）</label><input id="dishImage" type="file" accept="image/*"><div class="preview" id="imagePreview">暂无图片</div></div>
+      <div class="form-actions"><button type="button" class="btn ghost" data-close="editModal">取消</button><button class="btn" type="submit">保存菜品</button></div>
+    </form>
+  </div>
+
+  <div class="modal" id="backupModal" role="dialog" aria-modal="true">
+    <div class="dialog">
+      <h2>备份与恢复</h2>
+      <p class="hint">菜单保存在当前设备里。要把菜品和照片搬到另一台手机或电脑，请先“导出备份”，再在另一台设备上“导入备份”。</p>
+      <div class="sheet-actions">
+        <button class="btn" id="exportBtn">导出菜单备份</button>
+        <button class="btn ghost" id="importBtn">导入菜单备份</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+        <button class="btn ghost" id="printBtn">打印菜单</button>
+        <button class="btn danger" id="resetBtn">恢复初始菜单</button>
+      </div>
+      <div class="form-actions"><button class="btn ghost" data-close="backupModal">关闭</button></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (()=>{
+    'use strict';
+    const DEFAULTS=[];
+    const $=s=>document.querySelector(s), el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
+    const SEED_VERSION=1;
+    const state={dishes:[],picked:[],category:'全部',query:'',managing:false,pendingImage:null};
+    let db;
+    function openDb(){return new Promise((ok,no)=>{const r=indexedDB.open('zanjia-menu-open-source-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('data',{keyPath:'key'});r.onsuccess=()=>{db=r.result;ok()};r.onerror=()=>no(r.error)})}
+    function getSaved(){return new Promise((ok,no)=>{const r=db.transaction('data').objectStore('data').get('menu');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+    function save(){return new Promise((ok,no)=>{const tx=db.transaction('data','readwrite');tx.objectStore('data').put({key:'menu',version:SEED_VERSION,dishes:state.dishes,picked:state.picked,updatedAt:new Date().toISOString()});tx.oncomplete=ok;tx.onerror=()=>no(tx.error)})}
+    function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2200)}
+    function categories(){return [...new Set(state.dishes.map(d=>d.category).filter(Boolean))]}
+    function renderCats(){const box=$('#cats');box.replaceChildren();['全部',...categories()].forEach(c=>{const b=el('button','cat'+(c===state.category?' active':''),c);b.onclick=()=>{state.category=c;render()};box.append(b)});const dl=$('#categoryList');dl.replaceChildren(...categories().map(c=>{const o=document.createElement('option');o.value=c;return o}))}
+    function visible(){const q=state.query.trim().toLowerCase();return state.dishes.filter(d=>(state.category==='全部'||d.category===state.category)&&(!q||[d.name,d.category,d.note].some(v=>(v||'').toLowerCase().includes(q))))}
+    function render(){document.body.classList.toggle('managing',state.managing);$('#manageBtn').textContent=state.managing?'完成管理':'管理菜品';renderCats();const list=visible();$('#sectionTitle').textContent=state.category==='全部'?'全部菜品':state.category;$('#countText').textContent='共 '+list.length+' 道';const grid=$('#grid');grid.replaceChildren();if(!list.length){grid.append(el('div','empty',state.dishes.length?'没有找到菜品，换个关键词试试。':'还没有菜品，点击上方“＋ 添加新菜”创建第一道菜。'))}else list.forEach(d=>grid.append(card(d)));renderBasket()}
+    function card(d){const c=el('article','card');const photo=el('div','photo');if(d.image){const img=document.createElement('img');img.src=d.image;img.alt=d.name;photo.append(img)}else{const p=el('div','placeholder');p.append(el('b','',d.name.slice(0,1)),document.createTextNode('点击这里添加照片'));photo.append(p)}const quick=document.createElement('input');quick.type='file';quick.accept='image/*';quick.className='photo-pick manage-only';quick.title='更换菜品照片';quick.onchange=async()=>{if(quick.files[0]){d.image=await compress(quick.files[0]);await save();render();toast('照片已保存到本机')}};photo.append(quick);c.append(photo);const body=el('div','card-body');const row=el('div','card-row');const left=el('div');left.append(el('h3','',d.name),el('p','note',d.note||'家常好味'));row.append(left,el('span','tag',d.category));body.append(row);const acts=el('div','card-actions');const edit=el('button','btn ghost small manage-only','编辑');edit.type='button';edit.onclick=()=>openEditor(d);const del=el('button','btn danger small manage-only','删除');del.type='button';del.onclick=()=>removeDish(d);const pick=el('button','pick'+(state.picked.includes(d.id)?' on':''),state.picked.includes(d.id)?'✓ 已选':'＋ 想吃');pick.onclick=()=>togglePick(d.id);acts.append(edit,del,pick);body.append(acts);c.append(body);return c}
+    function renderBasket(){const chosen=state.dishes.filter(d=>state.picked.includes(d.id));$('#pickedCount').textContent=chosen.length;$('#pickedText').textContent=chosen.length?chosen.map(d=>d.name).join('、'):'还没有选择菜品'}
+    async function togglePick(id){state.picked=state.picked.includes(id)?state.picked.filter(x=>x!==id):[...state.picked,id];await save();render()}
+    function openModal(id){$('#'+id).classList.add('open')}function closeModal(id){$('#'+id).classList.remove('open')}
+    function openEditor(d){$('#formTitle').textContent=d?'编辑菜品':'添加菜品';$('#dishId').value=d?.id||'';$('#dishName').value=d?.name||'';$('#dishCategory').value=d?.category||state.category!=='全部'&&state.category||'';$('#dishNote').value=d?.note||'';$('#dishImage').value='';state.pendingImage=d?.image||'';showPreview(state.pendingImage);openModal('editModal')}
+    function showPreview(src){const p=$('#imagePreview');p.replaceChildren();if(src){const img=document.createElement('img');img.src=src;img.alt='照片预览';p.append(img)}else p.textContent='暂无图片'}
+    function removeDish(d){if(!confirm('确定删除“'+d.name+'”吗？'))return;state.dishes=state.dishes.filter(x=>x.id!==d.id);state.picked=state.picked.filter(x=>x!==d.id);save().then(()=>{render();toast('菜品已删除')})}
+    function compress(file){return new Promise((ok,no)=>{if(!file.type.startsWith('image/'))return no(new Error('请选择图片文件'));const reader=new FileReader();reader.onerror=()=>no(reader.error);reader.onload=()=>{const img=new Image();img.onerror=()=>no(new Error('图片无法读取'));img.onload=()=>{const max=1200,scale=Math.min(1,max/Math.max(img.width,img.height));const cv=document.createElement('canvas');cv.width=Math.round(img.width*scale);cv.height=Math.round(img.height*scale);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);ok(cv.toDataURL('image/jpeg',.82))};img.src=reader.result};reader.readAsDataURL(file)})}
+    function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+    async function exportData(){const data={app:'咱家菜单离线版',version:SEED_VERSION,exportedAt:new Date().toISOString(),dishes:state.dishes,picked:state.picked};download('咱家菜单备份-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(data,null,2),'application/json');toast('备份文件已导出')}
+    async function importData(file){try{const data=JSON.parse(await file.text());if(!data||!Array.isArray(data.dishes))throw new Error();const clean=data.dishes.filter(d=>d&&typeof d.name==='string'&&typeof d.category==='string').map((d,i)=>({id:String(d.id||('dish-import-'+Date.now().toString(36)+'-'+i)),name:d.name.slice(0,30),category:d.category.slice(0,20),note:String(d.note||'').slice(0,80),image:typeof d.image==='string'&&d.image.startsWith('data:image/')?d.image:''}));if(!clean.length)throw new Error();if(!confirm('导入会覆盖这台设备上现有的菜单，继续吗？'))return;state.dishes=clean;state.picked=Array.isArray(data.picked)?data.picked.filter(id=>clean.some(d=>d.id===id)):[];state.category='全部';await save();render();closeModal('backupModal');toast('菜单已成功恢复')}catch(e){alert('这个文件不是有效的菜单备份。')}}
+    $('#searchInput').oninput=e=>{state.query=e.target.value;render()};$('#addBtn').onclick=()=>openEditor();$('#manageBtn').onclick=()=>{state.managing=!state.managing;render()};$('#backupBtn').onclick=()=>openModal('backupModal');
+    $('#dishImage').onchange=async e=>{if(e.target.files[0]){try{state.pendingImage=await compress(e.target.files[0]);showPreview(state.pendingImage)}catch(err){alert(err.message)}}};
+    $('#dishForm').onsubmit=async e=>{e.preventDefault();const id=$('#dishId').value;const item={id:id||('dish-'+Date.now().toString(36)),name:$('#dishName').value.trim(),category:$('#dishCategory').value.trim(),note:$('#dishNote').value.trim(),image:state.pendingImage||''};if(!item.name||!item.category)return;if(id){const i=state.dishes.findIndex(d=>d.id===id);if(i>=0)state.dishes[i]=item}else state.dishes.unshift(item);await save();closeModal('editModal');state.category='全部';render();toast(id?'菜品已更新':'菜品已添加')};
+    $('#copyBtn').onclick=async()=>{const names=state.dishes.filter(d=>state.picked.includes(d.id)).map(d=>d.name);if(!names.length)return toast('先选择想吃的菜');const text='今晚想吃：'+names.join('、');try{await navigator.clipboard.writeText(text);toast('清单已复制')}catch(e){prompt('长按复制下面的清单：',text)}};
+    $('#clearBtn').onclick=async()=>{state.picked=[];await save();render()};$('#exportBtn').onclick=exportData;$('#importBtn').onclick=()=>$('#importFile').click();$('#importFile').onchange=e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value=''};$('#printBtn').onclick=()=>window.print();
+    $('#resetBtn').onclick=async()=>{if(!confirm('确定恢复初始菜单吗？当前新增的菜品和照片会被清除，请先导出备份。'))return;state.dishes=DEFAULTS.map(d=>({...d}));state.picked=[];await save();closeModal('backupModal');render();toast('已恢复初始菜单')};
+    document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>closeModal(m.id))});
+    (async()=>{try{await openDb();const saved=await getSaved();const current=saved?.version===SEED_VERSION&&saved?.dishes?.length;state.dishes=current?saved.dishes:DEFAULTS.map(d=>({...d}));state.picked=current?(saved.picked||[]):[];if(!current)await save();render()}catch(e){state.dishes=DEFAULTS.map(d=>({...d}));render();alert('浏览器无法保存离线数据，请改用 Chrome、Edge 或系统浏览器打开此文件。')}})();
+  })();
+  </script>
+</body>
+</html>
